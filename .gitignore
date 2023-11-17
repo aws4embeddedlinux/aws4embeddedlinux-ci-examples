@@ -1,0 +1,9 @@
+node_modules
+dist
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out
+
+cdk.context.json
+/aws4embeddedlinux-ci-examples.iml
