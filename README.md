@@ -20,7 +20,7 @@ Note that while often CDK projects do not require separately invoking the build 
 To deploy _all_ the pipeline examples, you can use the CDK deploy command:
 
 ```bash
-cdk deploy --all
+cdk deploy --all --require-approval never
 ```
 
 The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run.
@@ -55,6 +55,17 @@ See AWS CodeBuild pipeline: QemuEmbeddedLinuxPipeline-EmbeddedLinuxPipeline*
 Yocto can be used to create an EC2 AMI. This example builds an AMI based on Poky and meta-aws and exports it to your AMI registry using the [VM Import/Export Service](https://docs.aws.amazon.com/vm-import/latest/userguide/what-is-vmimport.html).
 
 The pipeline name starts with `PokyAmiPipeline-` in the CodePipeline page.
+
+### A NXP / IMX Pipeline
+This example will build an image for the [i.MX 6ULL EVK](https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-6ull-and-6ulz-applications-processor:MCIMX6ULL-EVK) board.
+
+Accepting the EULA is required. For this you need to uncomment the
+```
+# - EULA=y
+```
+ line in the build.buildspec.yml file in the nxp-imx-layer-repo CodeCommit repo.
+
+The pipeline name starts with `NxpImxPipeline-` in the CodePipeline page.
 
 ### Using pre-built, proprietary artifacts in a Pipeline
 
