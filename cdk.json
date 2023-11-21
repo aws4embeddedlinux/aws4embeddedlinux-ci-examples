@@ -1,6 +1,6 @@
 {
-  "app": "npx ts-node --prefer-ts-exts bin/poky-pipeline.ts",
-  "poky-pipeline": "npx ts-node --prefer-ts-exts bin/poky-pipeline.ts",
+  "app": "npx ts-node --prefer-ts-exts bin/app.ts",
+  "poky-pipeline": "npx ts-node --prefer-ts-exts bin/app.ts",
   "watch": {
     "include": ["**"],
     "exclude": [
