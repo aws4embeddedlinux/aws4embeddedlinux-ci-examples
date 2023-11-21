@@ -1,32 +1,62 @@
 # aws4embeddedlinux-ci-examples
-This repo is a showcase for the capabilities of [aws4embeddedlinux-ci](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git) cdk library.
+
+## Getting Started
+This repository shows ways to use the [aws4embeddedlinux-ci](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git) library. 
+
+In order to use these examples, you must setup [CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) including installing the CDK tool and bootstrapping the account you wish to deploy to. Additionally, you must have [Node](https://nodejs.org/en/) installed.
+
+### Clone and Setup NPM Project
+```bash
+git clone https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci-examples.git
+cd aws4embeddedlinux-ci-examples
+npm install .
+npm run build
+```
+
+Note that while often CDK projects do not require separately invoking the build command, this will ensure various assets in the library are packaged correctly.
+
+### Deploying
+
+To deploy _all_ the pipeline examples, you can use the CDK deploy command:
+
+```bash
+cdk deploy --all
+```
+
+The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other pipelines will work correctly. Once it is complete, the DemoPipeline in the CodePipeline console page is ready to run.
+
+### Removing Pipelines
+The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
+
+To remove all the resources associated with this application:
+```bash
+cdk destroy --all
+```
 
 ## Examples
-After a sucessful setup you will have those example pipelines ready to run.
+Several example pipelines are provided. Each one demonstrates a different aspect of how to build a Yocto image with AWS.
 
 ### A Simple Poky Based Pipeline
-This example will build a Yocto core-image-minimal based on a manifest.xml using the repo tool. Also enable CVE checking for it.
+This example will build the `core-image-minimal` image from Poky using the repo tool to manage layers. CVE checking is also enabled in the buildspec file.
 
-See AWS CodeBuild pipeline: PokyPipeline-DemoPipeline*
+The recommended place to view this is from the `Developer Tools > Code Pipeline > Pipelines` page. The pipeline will start with `PokyPipeline-` followed by some unique identifier. From the pipeline page, you can find the CodeCommit source repository, CodeBuild Project (with build logs), and the S3 bucket that the image is uploaded to at the end.
 
-#### A slightly modified version using KAS tool instead of repo:
+#### Using Kas
+The Kas example shows how to use a [Kas Config](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci/blob/main/source-repo/kas/kas.yml) to manage layers. This tool can help programatically manage layers and config with tighter Yocto integration than Git Submodules or the Repo tool.
+
 See AWS CodeBuild pipeline: KasPipeline-DemoPipeline*
 
 #### A slightly modified version building a qemu pipeline:
+This example builds a Qemu based image using [meta-aws-demos](https://github.com/aws4embeddedlinux/meta-aws-demos). The Qemu image can be run in the CodeBuild environment. Using SLIRP networking, [OEQA testing](https://docs.yoctoproject.org/singleindex.html#performing-automated-runtime-testing) such as ptest can be run in the pipeline. 
+
 See AWS CodeBuild pipeline: QemuDemoPipeline-DemoPipeline*
 
-### A Simple Poky Based Pipeline
-This example will build a Yocto core-image-minimal based on a manifest.xml using the repo tool. Also enable CVE checking for it.
-
-See AWS CodeBuild pipeline: PokyPipeline-DemoPipeline*
-
-
 ### A Poky Based EC2 AMI Pipeline
-Yocto can be used to create an EC2 AMI. This example demonstrates using this library to create a pipeline which builds an AMI and registers it in your account.
+Yocto can be used to create an EC2 AMI. This example builds an AMI based on Poky and meta-aws and exports it to your AMI registry using the [VM Import/Export Service](https://docs.aws.amazon.com/vm-import/latest/userguide/what-is-vmimport.html).
 
-See AWS CodeBuild pipeline: PokyAmiPipeline-DemoPipeline*
+The pipeline name starts with `PokyAmiPipeline-` in the CodePipeline page.
 
-### Using pre-build, proprietary artifacts in a Pipeline
+### Using pre-built, proprietary artifacts in a Pipeline
 
 This example is based on this [work](https://elinux.org/R-Car/Boards/Yocto-Gen3/v5.9.0) to build an image for Renesas R-Car-H3 Starter Kit Premier (unofficial name - H3ULCB) board including the proprietary graphics and multimedia drivers from Renesas.
 
@@ -50,57 +80,7 @@ See AWS CodeBuild pipeline: RenesasPipeline-DemoPipeline*
 
 ##
 
-## How to get started?
-
-### clone repo
-```bash
-git clone https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci-examples.git
-```
-
-### install npm packages:
-
-```bash
-cd aws4embeddedlinux-ci-examples
-npm install .
-```
-
-### updating
-Only if you had already packages installed before or the aws4embeddedlinux-ci library changed.
-```bash
-npm update
-```
-
-### build:
-
-```bash
-npm run build
-```
-
-### deploy cloud resources for all demo pipelines:
-#### pre-requisites: follow the [cdk guide on bootstrapping](https://docs.aws.amazon.com/cdk/v2/guide/bootstrapping.html#bootstrapping-customizing:~:text=the%20legacy%20bucket.-,Customizing%20bootstrapping,-There%20are%20two) your resources
-
-e.g.
-```bash
-cdk bootstrap
-```
-
-#### deploy
-
-```bash
-cdk deploy --all
-```
-
-The newly created pipeline `ubuntu_22_04BuildImagePipeline` from the CodePipeline console will start automatically.
-
-After that completes, the DemoPipeline in the CodePipeline console page is ready to run.
-
-
-### destroy cloud resources for all demo pipelines:
-```bash
-cdk destroy --all
-```
-
-## Useful commands
+## Useful NPM and CDK commands
 
 -   `npm run build` compile typescript to js
 -   `npm run watch` watch for changes and compile
@@ -114,6 +94,10 @@ Project Specific:
 -   `npm run zip-data` bundles the files for creating build host containers
 -   `npm run check` checks for lint and format issues
 -   `npm run docs` to generate documentation
+
+## Security
+
+See [SECURITY](SECURITY.md) for more information.
 
 ## Contributing
 
