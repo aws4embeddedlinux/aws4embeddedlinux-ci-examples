@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
 import {
-  DemoPipelineStack,
+  EmbeddedLinuxPipelineStack,
   BuildImageDataStack,
   BuildImagePipelineStack,
   BuildImageRepoStack,
@@ -57,7 +57,7 @@ const vpc = new PipelineNetworkStack(app, {
 /**
  * Create a poky distribution pipeline.
  */
-new DemoPipelineStack(app, "PokyPipeline", {
+new EmbeddedLinuxPipelineStack(app, "PokyPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -67,7 +67,7 @@ new DemoPipelineStack(app, "PokyPipeline", {
 /**
  * Create a meta-aws-demos pipeline for the Qemu example.
  */
-new DemoPipelineStack(app, "QemuDemoPipeline", {
+new EmbeddedLinuxPipelineStack(app, "QemuEmbeddedLinuxPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -79,7 +79,7 @@ new DemoPipelineStack(app, "QemuDemoPipeline", {
 /**
  * Create an AMI based on Poky.
  */
-new DemoPipelineStack(app, "PokyAmiPipeline", {
+new EmbeddedLinuxPipelineStack(app, "PokyAmiPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -91,7 +91,7 @@ new DemoPipelineStack(app, "PokyAmiPipeline", {
 /**
  * Create an kas based image.
  */
-new DemoPipelineStack(app, "KasPipeline", {
+new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -101,13 +101,25 @@ new DemoPipelineStack(app, "KasPipeline", {
 });
 
 /**
- * Create an renesas based image.
+ * Create an renesas image.
  */
-new DemoPipelineStack(app, "RenesasPipeline", {
+new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
   vpc: vpc.vpc,
   layerRepoName: "renesas-layer-repo",
   projectKind: ProjectKind.Renesas,
+});
+
+/**
+ * Create an nxp image.
+ */
+new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
+  ...defaultProps,
+  imageRepo: buildImageRepo.repository,
+  imageTag: ImageKind.Ubuntu22_04,
+  vpc: vpc.vpc,
+  layerRepoName: "nxp-imx-layer-repo",
+  projectKind: ProjectKind.NxpImx,
 });
