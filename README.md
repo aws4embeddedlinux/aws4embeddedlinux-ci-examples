@@ -1,7 +1,7 @@
 # aws4embeddedlinux-ci-examples
 
 ## Getting Started
-This repository shows ways to use the [aws4embeddedlinux-ci](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git) library. 
+This repository shows ways to use the [aws4embeddedlinux-ci](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git) library.
 
 In order to use these examples, you must setup [CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html) including installing the CDK tool and bootstrapping the account you wish to deploy to. Additionally, you must have [Node](https://nodejs.org/en/) installed.
 
@@ -23,7 +23,7 @@ To deploy _all_ the pipeline examples, you can use the CDK deploy command:
 cdk deploy --all
 ```
 
-The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other pipelines will work correctly. Once it is complete, the DemoPipeline in the CodePipeline console page is ready to run.
+The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run.
 
 ### Removing Pipelines
 The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
@@ -44,12 +44,12 @@ The recommended place to view this is from the `Developer Tools > Code Pipeline 
 #### Using Kas
 The Kas example shows how to use a [Kas Config](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci/blob/main/source-repo/kas/kas.yml) to manage layers. This tool can help programatically manage layers and config with tighter Yocto integration than Git Submodules or the Repo tool.
 
-See AWS CodeBuild pipeline: KasPipeline-DemoPipeline*
+See AWS CodeBuild pipeline: KasPipeline-EmbeddedLinuxPipeline*
 
 #### A slightly modified version building a qemu pipeline:
-This example builds a Qemu based image using [meta-aws-demos](https://github.com/aws4embeddedlinux/meta-aws-demos). The Qemu image can be run in the CodeBuild environment. Using SLIRP networking, [OEQA testing](https://docs.yoctoproject.org/singleindex.html#performing-automated-runtime-testing) such as ptest can be run in the pipeline. 
+This example builds a Qemu based image using [meta-aws-demos](https://github.com/aws4embeddedlinux/meta-aws-demos). The Qemu image can be run in the CodeBuild environment. Using SLIRP networking, [OEQA testing](https://docs.yoctoproject.org/singleindex.html#performing-automated-runtime-testing) such as ptest can be run in the pipeline.
 
-See AWS CodeBuild pipeline: QemuDemoPipeline-DemoPipeline*
+See AWS CodeBuild pipeline: QemuEmbeddedLinuxPipeline-EmbeddedLinuxPipeline*
 
 ### A Poky Based EC2 AMI Pipeline
 Yocto can be used to create an EC2 AMI. This example builds an AMI based on Poky and meta-aws and exports it to your AMI registry using the [VM Import/Export Service](https://docs.aws.amazon.com/vm-import/latest/userguide/what-is-vmimport.html).
@@ -76,7 +76,7 @@ Create a folder named `proprietary` in the root of the source repo. Put those tw
 
 Now a build should automatically start, succeed and you will get an image containing the proprietary graphics and multimedia drivers.
 
-See AWS CodeBuild pipeline: RenesasPipeline-DemoPipeline*
+See AWS CodeBuild pipeline: RenesasPipeline-EmbeddedLinuxPipeline*
 
 ##
 
