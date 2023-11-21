@@ -101,7 +101,7 @@ new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
 });
 
 /**
- * Create an renesas based image.
+ * Create an renesas image.
  */
 new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   ...defaultProps,
@@ -110,4 +110,16 @@ new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   vpc: vpc.vpc,
   layerRepoName: "renesas-layer-repo",
   projectKind: ProjectKind.Renesas,
+});
+
+/**
+ * Create an nxp image.
+ */
+new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
+  ...defaultProps,
+  imageRepo: buildImageRepo.repository,
+  imageTag: ImageKind.Ubuntu22_04,
+  vpc: vpc.vpc,
+  layerRepoName: "nxp-imx-layer-repo",
+  projectKind: ProjectKind.NxpImx,
 });
