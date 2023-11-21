@@ -2,7 +2,7 @@
   "name": "meta-aws-cdk-pipeline-reference",
   "version": "0.1.0",
   "bin": {
-    "demos-pipeline": "bin/poky-pipeline.js"
+    "embedded-linux-pipeline": "bin/app.js"
   },
   "scripts": {
     "clean": "tsc --build --clean && rm -rf dist && rm -rf cdk.out",
