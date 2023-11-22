@@ -85,11 +85,7 @@ Example stack name: PokyAmiPipeline
 This example will build an image for
 the [i.MX 6ULL EVK](https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-6ull-and-6ulz-applications-processor:MCIMX6ULL-EVK) board.
 
-Accepting the EULA is required. For this you need to uncomment the
-```
-# - EULA=y
-```
- line in the build.buildspec.yml file in the nxp-imx-layer-repo CodeCommit repo.
+NXP requires users to accept and comply with a EULA in order to build and as such the buildspec will require modification before the build succeeds. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
 
 The pipeline name starts with `NxpImxPipeline-` in the CodePipeline page.
 
