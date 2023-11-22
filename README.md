@@ -35,7 +35,7 @@ cdk deploy <EXAMPLE>
 
 The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created
 pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other
-pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run. Thus `BuildImagePipeline` will always be a dependency of the deployment if you deploy just a specific example.
+pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run.
 
 ### Removing Pipelines
 The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
