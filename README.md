@@ -39,8 +39,7 @@ pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in
 
 ### Removing Pipelines
 The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
-[!WARNING]
-Do not delete stacks while a CodePipeline is running this can lead to unexpected failures!
+**Do not delete stacks while a CodePipeline is running, this can lead to unexpected failures!**
 
 To remove all the resources associated with this application:
 ```bash
