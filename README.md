@@ -27,15 +27,15 @@ cdk deploy --all
 
 Alternatively to deploy just a specific pipeline example, you can use the CDK deploy command:
 
-EXAMPLE can be one or more of those: QemuEmbeddedLinuxPipeline, PokyAmiPipeline, KasPipeline, RenesasPipeline, NxpImxPipeline
+EXAMPLE can be one or more of those: PokyPipeline, QemuEmbeddedLinuxPipeline, PokyAmiPipeline, KasPipeline, RenesasPipeline, NxpImxPipeline
 
 ```bash
-cdk deploy BuildImagePipeline <EXAMPLE>
+cdk deploy <EXAMPLE>
 ```
 
 The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created
 pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other
-pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run. Thus `BuildImagePipeline` must always be part of the deployment if you deploy just a specific example.
+pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run. Thus `BuildImagePipeline` will always be a dependency of the deployment if you deploy just a specific example.
 
 ### Removing Pipelines
 The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
@@ -54,6 +54,8 @@ This example will build the `core-image-minimal` image from Poky using the repo 
 The recommended place to view this is from the `Developer Tools > Code Pipeline > Pipelines` page. The pipeline will start with `PokyPipeline-`
 followed by some unique identifier. From the pipeline page, you can find the CodeCommit source repository, the CodeBuild Project (with build logs),
 and the S3 bucket that the image is uploaded to, at the end.
+
+Example stack name: PokyPipeline
 
 #### Using Kas
 The Kas example shows how to use a [Kas Config](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci/blob/main/source-repo/kas/kas.yml) to manage
