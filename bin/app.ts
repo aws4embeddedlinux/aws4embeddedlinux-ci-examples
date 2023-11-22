@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib";
+import { addDependency } from "aws-cdk-lib/core/lib/deps";
 import {
   EmbeddedLinuxPipelineStack,
   BuildImageDataStack,
@@ -40,7 +41,7 @@ const buildImageRepo = new BuildImageRepoStack(app, "BuildImageRepo", {
   ...defaultProps,
 });
 
-new BuildImagePipelineStack(app, "BuildImagePipeline", {
+const buildImagePipeline = new BuildImagePipelineStack(app, "BuildImagePipeline", {
   ...defaultProps,
   dataBucket: buildImageData.bucket,
   repository: buildImageRepo.repository,
@@ -57,17 +58,18 @@ const vpc = new PipelineNetworkStack(app, {
 /**
  * Create a poky distribution pipeline.
  */
-new EmbeddedLinuxPipelineStack(app, "PokyPipeline", {
+const pokyPipeline = new EmbeddedLinuxPipelineStack(app, "PokyPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
   vpc: vpc.vpc,
 });
+pokyPipeline.addDependency(buildImagePipeline)
 
 /**
  * Create a meta-aws-demos pipeline for the Qemu example.
  */
-new EmbeddedLinuxPipelineStack(app, "QemuEmbeddedLinuxPipeline", {
+const qemuEmbeddedLinuxPipeline = new EmbeddedLinuxPipelineStack(app, "QemuEmbeddedLinuxPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -75,11 +77,12 @@ new EmbeddedLinuxPipelineStack(app, "QemuEmbeddedLinuxPipeline", {
   layerRepoName: "qemu-demo-layer-repo",
   projectKind: ProjectKind.MetaAwsDemo,
 });
+qemuEmbeddedLinuxPipeline.addDependency(buildImagePipeline)
 
 /**
  * Create an AMI based on Poky.
  */
-new EmbeddedLinuxPipelineStack(app, "PokyAmiPipeline", {
+const pokyAmiPipeline = new EmbeddedLinuxPipelineStack(app, "PokyAmiPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -87,11 +90,12 @@ new EmbeddedLinuxPipelineStack(app, "PokyAmiPipeline", {
   layerRepoName: "ec2-ami-poky-layer-repo",
   projectKind: ProjectKind.PokyAmi,
 });
+pokyAmiPipeline.addDependency(buildImagePipeline)
 
 /**
  * Create an kas based image.
  */
-new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
+const kasPipeline = new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -99,11 +103,12 @@ new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
   layerRepoName: "biga-kas-layer-repo",
   projectKind: ProjectKind.Kas,
 });
+kasPipeline.addDependency(buildImagePipeline)
 
 /**
  * Create an renesas image.
  */
-new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
+const renesasPipeline = new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -111,11 +116,12 @@ new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   layerRepoName: "renesas-layer-repo",
   projectKind: ProjectKind.Renesas,
 });
+renesasPipeline.addDependency(buildImagePipeline)
 
 /**
  * Create an nxp image.
  */
-new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
+const nxpImxPipeline = new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
   ...defaultProps,
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
@@ -123,3 +129,4 @@ new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
   layerRepoName: "nxp-imx-layer-repo",
   projectKind: ProjectKind.NxpImx,
 });
+nxpImxPipeline.addDependency(buildImagePipeline)
