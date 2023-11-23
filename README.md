@@ -6,6 +6,10 @@ This repository shows ways to use the [aws4embeddedlinux-ci](https://github.com/
 In order to use these examples, you must set up the [CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html), including
 installing the CDK tool and bootstrapping the account you wish to deploy to. Additionally, you must have [Node](https://nodejs.org/en/) installed.
 
+> [!NOTE]
+> This library is tested against Node Versions 16, 18, and 20. If these versions are not available for your system, we recommend
+> using [NVM](https://github.com/nvm-sh/nvm) to install a compatible version.
+
 ### Clone and Setup NPM Project
 ```bash
 git clone https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci-examples.git
