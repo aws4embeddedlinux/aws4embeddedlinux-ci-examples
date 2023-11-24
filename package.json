@@ -1,6 +1,6 @@
 {
   "name": "meta-aws-cdk-pipeline-reference",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "bin": {
     "embedded-linux-pipeline": "bin/app.js"
   },
@@ -31,8 +31,8 @@
     "typescript": "~5.0.4"
   },
   "dependencies": {
-    "aws4embeddedlinux-cdk-lib": "aws4embeddedlinux/aws4embeddedlinux-ci",
     "aws-cdk-lib": "2.86.0",
+    "aws4embeddedlinux-cdk-lib": "github:aws4embeddedlinux/aws4embeddedlinux-ci",
     "constructs": "^10.0.0",
     "source-map-support": "^0.5.21"
   }
