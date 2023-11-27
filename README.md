@@ -29,9 +29,9 @@ To deploy _all_ the pipeline examples, you can use the CDK deploy command:
 cdk deploy --all
 ```
 
-Alternatively to deploy just a specific pipeline example, you can use the CDK deploy command:
+Alternatively, to deploy just a specific pipeline example, you can use the CDK deploy command:
 
-EXAMPLE can be one or more of those: PokyPipeline, QemuEmbeddedLinuxPipeline, PokyAmiPipeline, KasPipeline, RenesasPipeline, NxpImxPipeline
+\<EXAMPLE\> can be one or more of: PokyPipeline, QemuEmbeddedLinuxPipeline, PokyAmiPipeline, KasPipeline, RenesasPipeline, NxpImxPipeline
 
 ```bash
 cdk deploy <EXAMPLE>
@@ -89,7 +89,7 @@ Example stack name: PokyAmiPipeline
 This example will build an image for
 the [i.MX 6ULL EVK](https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-6ull-and-6ulz-applications-processor:MCIMX6ULL-EVK) board.
 
-NXP requires users to accept and comply with a EULA in order to build and as such the buildspec will require modification before the build succeeds. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
+NXP requires users to accept and comply with a EULA in order to build and, for this reason, the buildspec will require modification before the build succeeds. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
 
 The pipeline name starts with `NxpImxPipeline-` in the CodePipeline page.
 
