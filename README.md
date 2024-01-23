@@ -62,6 +62,8 @@ and the S3 bucket that the image is uploaded to, at the end.
 
 Example stack name: PokyPipeline
 
+Expected build time: 32min / rebuild (without any change, just use sstate cache): 8min
+
 #### Using Kas
 The Kas example shows how to use a [Kas Config](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci/blob/main/source-repo/kas/kas.yml) to manage
 layers. This tool can help programatically manage layers and config with tighter Yocto integration than Git Submodules or the Repo tool.
@@ -70,12 +72,16 @@ See the AWS CodeBuild pipeline: KasPipeline-EmbeddedLinuxPipeline*
 
 Example stack name: KasPipeline
 
+Expected build time: 36min / rebuild (without any change, just use sstate cache): 11min
+
 #### A slightly modified version building a qemu pipeline:
 This example builds a Qemu based image using [meta-aws-demos](https://github.com/aws4embeddedlinux/meta-aws-demos). The Qemu image can be run in
 the CodeBuild environment. Using SLIRP networking, [OEQA testing](https://docs.yoctoproject.org/singleindex.html#performing-automated-runtime-testing)
 such as ptest can be run in the pipeline.
 
 See the AWS CodeBuild pipeline: QemuEmbeddedLinuxPipeline-EmbeddedLinuxPipeline*
+
+Expected build time: 45min / rebuild (without any change, just use sstate cache): 14min
 
 ### A Poky Based EC2 AMI Pipeline
 Yocto can be used to create an EC2 AMI. This example builds an AMI based on Poky and meta-aws and exports it to your AMI registry using
@@ -84,6 +90,8 @@ the [VM Import/Export Service](https://docs.aws.amazon.com/vm-import/latest/user
 The pipeline name starts with `PokyAmiPipeline-` in the CodePipeline page.
 
 Example stack name: PokyAmiPipeline
+
+Expected build time: 52min / rebuild (without any change, just use sstate cache): 17min
 
 ### A NXP / IMX Pipeline
 This example will build an image for
@@ -119,6 +127,8 @@ Graphic drivers are required for Wayland. Multimedia drivers are optional.
 See the AWS CodeBuild pipeline: RenesasPipeline-EmbeddedLinuxPipeline*
 
 Example stack name: RenesasPipeline
+
+Expected build time: 27min / rebuild (without any change, just use sstate cache): 9min
 
 ---
 
