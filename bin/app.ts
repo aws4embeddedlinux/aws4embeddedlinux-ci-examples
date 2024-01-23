@@ -10,6 +10,9 @@ import {
   ImageKind,
   ProjectKind,
 } from "aws4embeddedlinux-cdk-lib";
+import * as s3 from 'aws-cdk-lib/aws-s3';
+import { RemovalPolicy } from 'aws-cdk-lib';
+import * as kms from 'aws-cdk-lib/aws-kms';
 
 const app = new cdk.App();
 
@@ -30,6 +33,47 @@ const defaultProps: cdk.StackProps = {
 };
 
 /**
+ * Set up networking to allow us to securely attach EFS to our CodeBuild instances.
+ */
+const vpc = new PipelineNetworkStack(app, {
+  ...defaultProps,
+});
+
+/**
+ * Set up shared Artifacts and ArtifactAccessLogging Bucket for all example pipelines.
+ * Using Pipeline Network Stack as a container for the buckets.
+ */
+
+const accessLoggingBucket = new s3.Bucket(vpc, 'ArtifactAccessLogging', {
+  versioned: true,
+  enforceSSL: true,
+});
+
+const encryptionKey = new kms.Key(vpc, 'PipelineArtifactKey', {
+  removalPolicy: RemovalPolicy.DESTROY,
+  enableKeyRotation: true,
+});
+
+const artifactBucket = new s3.Bucket(vpc, 'PipelineArtifacts', {
+  versioned: true,
+  enforceSSL: true,
+  serverAccessLogsBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "PipelineArtifacts",
+  encryptionKey,
+  encryption: s3.BucketEncryption.KMS,
+  blockPublicAccess: new s3.BlockPublicAccess(
+    s3.BlockPublicAccess.BLOCK_ALL
+  ),
+});
+
+const outputBucket = new s3.Bucket(vpc, 'PipelineOutput', {
+  versioned: true,
+  enforceSSL: true,
+  serverAccessLogsBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "PipelineOutput",
+});
+
+/**
  * Set up the Stacks that create our Build Host.
  */
 const buildImageData = new BuildImageDataStack(app, "BuildImageData", {
@@ -46,13 +90,9 @@ const buildImagePipeline = new BuildImagePipelineStack(app, "BuildImagePipeline"
   dataBucket: buildImageData.bucket,
   repository: buildImageRepo.repository,
   imageKind: ImageKind.Ubuntu22_04,
-});
-
-/**
- * Set up networking to allow us to securely attach EFS to our CodeBuild instances.
- */
-const vpc = new PipelineNetworkStack(app, {
-  ...defaultProps,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "BuildImagePipeline",
+  artifactBucket: artifactBucket,
 });
 
 /**
@@ -63,6 +103,11 @@ const pokyPipeline = new EmbeddedLinuxPipelineStack(app, "PokyPipeline", {
   imageRepo: buildImageRepo.repository,
   imageTag: ImageKind.Ubuntu22_04,
   vpc: vpc.vpc,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "PokyPipeline",
+  artifactBucket: artifactBucket,
+  outputBucket: outputBucket,
+  subDirectoryName: "PokyPipeline",
 });
 pokyPipeline.addDependency(buildImagePipeline)
 
@@ -76,6 +121,11 @@ const qemuEmbeddedLinuxPipeline = new EmbeddedLinuxPipelineStack(app, "QemuEmbed
   vpc: vpc.vpc,
   layerRepoName: "qemu-demo-layer-repo",
   projectKind: ProjectKind.MetaAwsDemo,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "QemuEmbeddedLinuxPipeline",
+  artifactBucket: artifactBucket,
+  outputBucket: outputBucket,
+  subDirectoryName: "QemuEmbeddedLinuxPipeline",
 });
 qemuEmbeddedLinuxPipeline.addDependency(buildImagePipeline)
 
@@ -89,6 +139,10 @@ const pokyAmiPipeline = new EmbeddedLinuxPipelineStack(app, "PokyAmiPipeline", {
   vpc: vpc.vpc,
   layerRepoName: "ec2-ami-poky-layer-repo",
   projectKind: ProjectKind.PokyAmi,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "PokyAmiPipeline",
+  artifactBucket: artifactBucket,
+  subDirectoryName: "PokyAmiPipeline",
 });
 pokyAmiPipeline.addDependency(buildImagePipeline)
 
@@ -102,6 +156,11 @@ const kasPipeline = new EmbeddedLinuxPipelineStack(app, "KasPipeline", {
   vpc: vpc.vpc,
   layerRepoName: "biga-kas-layer-repo",
   projectKind: ProjectKind.Kas,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "KasPipeline",
+  artifactBucket: artifactBucket,
+  outputBucket: outputBucket,
+  subDirectoryName: "KasPipeline",
 });
 kasPipeline.addDependency(buildImagePipeline)
 
@@ -115,6 +174,11 @@ const renesasPipeline = new EmbeddedLinuxPipelineStack(app, "RenesasPipeline", {
   vpc: vpc.vpc,
   layerRepoName: "renesas-layer-repo",
   projectKind: ProjectKind.Renesas,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "RenesasPipeline",
+  artifactBucket: artifactBucket,
+  outputBucket: outputBucket,
+  subDirectoryName: "RenesasPipeline",
 });
 renesasPipeline.addDependency(buildImagePipeline)
 
@@ -128,5 +192,10 @@ const nxpImxPipeline = new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
   vpc: vpc.vpc,
   layerRepoName: "nxp-imx-layer-repo",
   projectKind: ProjectKind.NxpImx,
+  accessLoggingBucket: accessLoggingBucket,
+  serverAccessLogsPrefix: "NxpImxPipeline",
+  artifactBucket: artifactBucket,
+  outputBucket: outputBucket,
+  subDirectoryName: "NxpImxPipeline",
 });
 nxpImxPipeline.addDependency(buildImagePipeline)
