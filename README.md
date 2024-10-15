@@ -130,7 +130,25 @@ Example stack name: RenesasPipeline
 
 Expected build time: 27min / rebuild (without any change, just use sstate cache): 9min
 
----
+### A AWS CodeBuild Project
+This will create an Embedded Linux ready AWS CodeBuild project that can be used to connect to a source, e.g. [GitHub Actions](https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html). This is not using any CodePipeline.
+
+And use the EFS to share downloads and sstate cache between the runners.
+
+The connection to the CodeBuild source must be performed manually.
+
+Also you can clone the CodeBuild project and share the efs between the CodeBuild projects.
+
+See the AWS CodeBuild pipeline: EmbeddedLinuxCodebuildProje-*
+
+To make a source connection to GitHub you need to:
+- Select a "Source provider"->"GitHub"
+- Select "Primary source webhook events" -> "Webhook - optional" -> "Rebuild every time a code change is pushed to this repository"
+- Add "Filter group 1" -> "WORKFLOW_JOB_QUEUED"
+- Modify the GitHub action `runs-on: ${{ vars.CODEBUILD_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}`
+CODEBUILD_RUNNER_NAME should be `codebuild-EmbeddedLinuxCodebuildProjeNAME` with prefix `codebuild-`. See example [here](https://github.com/aws4embeddedlinux/meta-aws-demos/blob/master/.github/workflows/build-gg.yml).
+
+Example stack name: EmbeddedLinuxCodeBuildProject
 
 ## Useful NPM and CDK commands
 

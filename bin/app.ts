@@ -3,6 +3,7 @@ import * as cdk from "aws-cdk-lib";
 import { addDependency } from "aws-cdk-lib/core/lib/deps";
 import {
   EmbeddedLinuxPipelineStack,
+  EmbeddedLinuxCodebuildProjectStack,
   BuildImageDataStack,
   BuildImagePipelineStack,
   BuildImageRepoStack,
@@ -199,3 +200,15 @@ const nxpImxPipeline = new EmbeddedLinuxPipelineStack(app, "NxpImxPipeline", {
   subDirectoryName: "NxpImxPipeline",
 });
 nxpImxPipeline.addDependency(buildImagePipeline)
+
+/**
+ * Create an Embedded Linux Codebuild Project.
+ */
+const codeBuildActionsEnv = new EmbeddedLinuxCodebuildProjectStack(app, "EmbeddedLinuxCodeBuildProject", {
+  ...defaultProps,
+  imageRepo: buildImageRepo.repository,
+  imageTag: ImageKind.Ubuntu22_04,
+  vpc: vpc.vpc,
+  projectKind: ProjectKind.CodeBuild,
+});
+codeBuildActionsEnv.addDependency(buildImagePipeline)
