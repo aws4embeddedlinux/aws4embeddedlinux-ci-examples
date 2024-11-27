@@ -36,7 +36,7 @@ const defaultProps: cdk.StackProps = {
 /**
  * Set up networking to allow us to securely attach EFS to our CodeBuild instances.
  */
-const vpc = new PipelineNetworkStack(app, {
+const vpc = new PipelineNetworkStack(app, "PipelineNetwork", {
   ...defaultProps,
 });
 
