@@ -7,7 +7,7 @@ In order to use these examples, you must set up the [CDK](https://docs.aws.amazo
 installing the CDK tool and bootstrapping the account you wish to deploy to. Additionally, you must have [Node](https://nodejs.org/en/) installed.
 
 > [!NOTE]
-> This library is tested against Node Versions 16, 18, and 20. If these versions are not available for your system, we recommend
+> This library is tested against Node Version 22. If these version are not available for your system, we recommend
 > using [NVM](https://github.com/nvm-sh/nvm) to install a compatible version.
 
 ### Clone and Setup NPM Project
