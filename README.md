@@ -83,10 +83,10 @@ Once the pipeline completes and the image is available in the ECR repository, th
 
 ### Deploying the project pipeline stack
 
-Alternatively, to deploy a specific example pipeline, you can use the following CDK deploy command:
+To deploy a specific pipeline type, you can use the following CDK deploy command:
 
 ```bash
-cdk deploy <pipeline-id> --require-approval never --concurrency 3
+cdk deploy <pipeline-id> --require-approval
 ```
 
 where **\<pipeline-id\>** can be one or more of the following: 
@@ -128,7 +128,7 @@ Again, the created pipeline can be found in the AWS console under `Developer Too
 > Once you have adjusted the content, you can update and upload the zip back to Amazon S3, and the pipeline will restart.
 >
 
-> [!**Custom**] 
+> [!**Custom Pipeline**] 
 > 
 > TODO
 >
