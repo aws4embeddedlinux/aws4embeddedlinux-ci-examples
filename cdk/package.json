@@ -1,23 +1,22 @@
 {
   "name": "aws4embeddedlinux-cdk-examples",
   "version": "0.2.0",
-  "bin": {
-    "aws4embeddedlinux-cdk-examples": "bin/app.ts"
-  },
+  "bin": "bin/app.ts",
   "license": "MIT",
   "scripts": {
-    "clean": "tsc --build --clean && rm -rf dist && rm -rf cdk.out",
+    "clean": "tsc --build --clean",
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "doc": "typedoc",
+    "doc": "typedoc --sort source-order --readme README.md",
     "format": "eslint '**/*.{js,ts,json}' --quiet --fix",
-    "check": "eslint '**/*.{js,ts,json}'"
+    "check": "eslint '**/*.{js,ts,json}'",
+    "postclean": "rm -rf ./dist"
   },
   "dependencies": {
     "aws-cdk-lib": "2.176.0",
-    "aws4embeddedlinux-cdk-lib": "github:adadouche/aws4embeddedlinux-ci",
+    "aws4embeddedlinux-cdk-lib": "github:adadouche/aws4embeddedlinux-ci#dev-adadouche",
     "constructs": "^10.4.2",
     "source-map-support": "^0.5.21"
   },
@@ -49,5 +48,6 @@
   },
   "overrides": {
     "glob": "^9.3.5"
-  }
+  },
+  "packageManager": "yarn@4.6.0"
 }
