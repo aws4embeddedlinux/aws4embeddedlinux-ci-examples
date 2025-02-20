@@ -1,6 +1,5 @@
 # aws4embeddedlinux-ci-examples
 
-## Getting Started
 This repository shows ways to use the [aws4embeddedlinux-ci](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git) library.
 
 In order to use these examples, you must set up the [CDK](https://docs.aws.amazon.com/cdk/v2/guide/getting_started.html), including
@@ -10,160 +9,152 @@ installing the CDK tool and bootstrapping the account you wish to deploy to. Add
 > This library is tested against Node Versions 16, 18, and 20. If these versions are not available for your system, we recommend
 > using [NVM](https://github.com/nvm-sh/nvm) to install a compatible version.
 
-### Clone and Setup NPM Project
+---
+
+## Setup
+
+### Setting environment variables
+
+```bash
+export AWS_PROFILE="default"
+export AWS_DEFAULT_REGION=$(aws configure get region --profile ${AWS_PROFILE})
+export AWS_DEFAULT_ACCOUNT=$(aws sts get-caller-identity --query Account --output text --profile ${AWS_PROFILE})
+
+echo "PROFILE : $AWS_PROFILE"
+echo "ACCOUNT : $AWS_DEFAULT_ACCOUNT"
+echo "REGION  : $AWS_DEFAULT_REGION"
+```
+
+### Clone the project
+
 ```bash
 git clone https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci-examples.git
 cd aws4embeddedlinux-ci-examples
-npm install .
-npm run build
 ```
 
-Note that while the CDK projects often do not require that you invoke the build command separately, doing so will ensure various assets
-in the library are packaged correctly.
+### Bootstrap CDK
 
-### Deploying
-
-To deploy _all_ the pipeline examples, you can use the CDK deploy command:
+> [!NOTE]
+> Only required once unless you upgrade your cdk version
 
 ```bash
-cdk deploy --all
+cdk bootstrap aws://$AWS_DEFAULT_ACCOUNT/$AWS_DEFAULT_REGION
 ```
 
-Alternatively, to deploy just a specific pipeline example, you can use the CDK deploy command:
-
-\<EXAMPLE\> can be one or more of: PokyPipeline, QemuEmbeddedLinuxPipeline, PokyAmiPipeline, KasPipeline, RenesasPipeline, NxpImxPipeline
+### Install packages and build the stack
 
 ```bash
-cdk deploy <EXAMPLE>
+cd cdk
+
+yarn install
+yarn build
 ```
 
-The pipelines can be found in the `Developer Tools > Code Pipeline > Pipelines` Console page. The newly created
-pipeline `ubuntu_22_04BuildImagePipeline` should start automatically. If not, it will need to be run before other
-pipelines will work correctly. Once it is complete, the EmbeddedLinuxPipeline in the CodePipeline console page is ready to run.
+> [!NOTE]
+>
+> While the CDK projects often do not require that you invoke the build command separately, doing so will ensure various assets in the library are packaged correctly.
 
-### Removing Pipelines
+### Deploying the base image pipeline stack
+
+First, you will need to deploy the *base ubuntu* image pipeline (`aws4el-ci-pipeline-base-image`).
+
+```bash
+cdk deploy aws4el-ci-pipeline-base-image --require-approval never --progress bar
+```
+
+The created pipeline can be found in the AWS console under `Developer Tools > Pipeline - CodePipeline > Pipelines`. 
+
+The newly created pipeline `aws4el-ci-pipeline-base-image` should start automatically. If not, you can start it manually.
+
+> _NOTE_:
+> The `aws4el-ci-pipeline-base-image` will need to be successfully completed before other pipelines can work correctly. 
+
+**_Expected build times: 5 minutes_**
+
+You can check that the pipeline completed sucessfully when the following command returns an ***imageIds** entry :
+
+```bash
+aws ecr list-images \
+    --repository-name "aws4el-ci-$AWS_DEFAULT_ACCOUNT-$AWS_DEFAULT_REGION-repo" \
+    --query "imageIds[?imageTag=='aws4el-ci-pipeline-base-image']"
+```
+
+Once the pipeline completes and the image is available in the ECR repository, the other `EmbeddedLinuxPipeline` stacks can be created and executed.
+
+### Deploying the project pipeline stack
+
+To deploy a specific pipeline type, you can use the following CDK deploy command:
+
+```bash
+cdk deploy <pipeline-id> --require-approval
+```
+
+where **\<pipeline-id\>** can be one or more of the following: 
+
+| Name                | Pipeline stack id             |
+|---------------------|-------------------------------|
+| Poky                | `aws4el-ci-pipeline-poky`     |
+| Poky Ami            | `aws4el-ci-pipeline-poky-ami` |
+| Qemu Embedded Linux | `aws4el-ci-pipeline-qemu`     |
+| Kas                 | `aws4el-ci-pipeline-kas`      |
+| Renesas             | `aws4el-ci-pipeline-renesas`  |
+| NXP-IMX             | `aws4el-ci-pipeline-nxp-imx`  |
+| Custom              | `aws4el-ci-pipeline-custom`   |
+
+Again, the created pipeline can be found in the AWS console under `Developer Tools > Pipeline - CodePipeline > Pipelines`. 
+
+> [!**NXP-IMX**] 
+> 
+> The deployed pipeline for **NXP-IMX** will not complete as you should first accept the EULA and update the `build.buildspec.yml` file accordingly. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
+>
+> The source files are available in a S3 bucket that you can get with the following command:
+>
+> ```sh
+> aws cloudformation describe-stacks --stack-name aws4el-ci-pipeline-nxp-imx --output text --query "Stacks[0].Outputs[?OutputKey=='SourceURI'].OutputValue"
+> ```
+>
+> Once you have adjusted the content, you can update and upload the zip back to Amazon S3, and the pipeline will restart.
+>
+
+> [!**Renesas**] 
+> 
+> The deployed pipeline for **Renesas** will complete. However, it won't include the Multimedia and Graphics library and related Linux drivers. See the [Renesas](https://github.com/adadouche/aws4embeddedlinux-ci/blob/dev-adadouche/README.md#renesas) section for more detail.
+> The source files are available in a S3 bucket that you can get with the following command:
+>
+> ```sh
+> aws cloudformation describe-stacks --stack-name aws4el-ci-pipeline-renesas --output text --query "Stacks[0].Outputs[?OutputKey=='SourceURI'].OutputValue"
+> ```
+>
+> Once you have adjusted the content, you can update and upload the zip back to Amazon S3, and the pipeline will restart.
+>
+
+> [!**Custom Pipeline**] 
+> 
+> TODO
+>
+
+To deploy _all_ the example pipelines, you can use the CDK deploy command:
+
+```bash
+cdk deploy aws4el-ci-pipelines --require-approval never --concurrency 3
+```
+
+> [!*NOTE*] 
+> 
+> `aws4el-ci-pipelines`is an empty stack that depends on the other stacks, so that if you deploy it, it will deploy the others.
+>
+
+### Cleanup
+
 The `cdk destroy` command can be used to remove individual pipelines and their related resources. This can also be done in the CloudFormation Console Page.
-**Do not delete stacks while a CodePipeline is running, this can lead to unexpected failures!**
+
+> **Do not delete stacks while a CodePipeline is running, this can lead to unexpected failures!**
 
 To remove all the resources associated with this application:
+
 ```bash
-cdk destroy --all
+cdk destroy --all --force
 ```
-
-## Examples
-Several example pipelines are provided. Each one demonstrates a different aspect of how to build a Yocto image with AWS.
-
-### A Simple Poky Based Pipeline
-This example will build the `core-image-minimal` image from Poky using the repo tool to manage layers. CVE checking is also enabled in the buildspec file.
-
-The recommended place to view this is from the `Developer Tools > Code Pipeline > Pipelines` page. The pipeline will start with `PokyPipeline-`
-followed by some unique identifier. From the pipeline page, you can find the CodeCommit source repository, the CodeBuild Project (with build logs),
-and the S3 bucket that the image is uploaded to, at the end.
-
-Example stack name: PokyPipeline
-
-Expected build time: 32min / rebuild (without any change, just use sstate cache): 8min
-
-#### Using Kas
-The Kas example shows how to use a [Kas Config](https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci/blob/main/source-repo/kas/kas.yml) to manage
-layers. This tool can help programatically manage layers and config with tighter Yocto integration than Git Submodules or the Repo tool.
-
-See the AWS CodeBuild pipeline: KasPipeline-EmbeddedLinuxPipeline*
-
-Example stack name: KasPipeline
-
-Expected build time: 36min / rebuild (without any change, just use sstate cache): 11min
-
-#### A slightly modified version building a qemu pipeline:
-This example builds a Qemu based image using [meta-aws-demos](https://github.com/aws4embeddedlinux/meta-aws-demos). The Qemu image can be run in
-the CodeBuild environment. Using SLIRP networking, [OEQA testing](https://docs.yoctoproject.org/singleindex.html#performing-automated-runtime-testing)
-such as ptest can be run in the pipeline.
-
-See the AWS CodeBuild pipeline: QemuEmbeddedLinuxPipeline-EmbeddedLinuxPipeline*
-
-Expected build time: 45min / rebuild (without any change, just use sstate cache): 14min
-
-### A Poky Based EC2 AMI Pipeline
-Yocto can be used to create an EC2 AMI. This example builds an AMI based on Poky and meta-aws and exports it to your AMI registry using
-the [VM Import/Export Service](https://docs.aws.amazon.com/vm-import/latest/userguide/what-is-vmimport.html).
-
-The pipeline name starts with `PokyAmiPipeline-` in the CodePipeline page.
-
-Example stack name: PokyAmiPipeline
-
-Expected build time: 52min / rebuild (without any change, just use sstate cache): 17min
-
-### A NXP / IMX Pipeline
-This example will build an image for
-the [i.MX 6ULL EVK](https://www.nxp.com/design/development-boards/i-mx-evaluation-and-development-boards/evaluation-kit-for-the-i-mx-6ull-and-6ulz-applications-processor:MCIMX6ULL-EVK) board.
-
-NXP requires users to accept and comply with a EULA in order to build and, for this reason, the buildspec will require modification before the build succeeds. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
-
-The pipeline name starts with `NxpImxPipeline-` in the CodePipeline page.
-
-Example stack name: NxpImxPipeline
-
-### Using pre-built, proprietary artifacts in a Pipeline
-
-This example is based on this [work](https://elinux.org/R-Car/Boards/Yocto-Gen3/v5.9.0) to build an image for Renesas R-Car-H3 Starter Kit
-Premier board (unofficial name - H3ULCB) including the proprietary graphics and multimedia drivers from Renesas.
-
-Download the Multimedia and Graphics library and related Linux drivers from the following link (registration necessary):
-https://www.renesas.com/us/en/application/automotive/r-car-h3-m3-h2-m2-e2-documents-software
-
-#### Download two files:
-
-- R-Car_Gen3_Series_Evaluation_Software_Package_for_Linux-20220121.zip
-- R-Car_Gen3_Series_Evaluation_Software_Package_of_Linux_Drivers-20220121.zip
-
-Graphic drivers are required for Wayland. Multimedia drivers are optional.
-
-#### Steps to build the image
-
-1. Create a folder named `proprietary` in the root of the source repo, and put those two downloaded files into this folder.
-1. Deploy the build pipeline and uncomment the `#TODO` in the build.sh file.
-1. A build should automatically start. Once it succeeds you will get an image containing the proprietary graphics and multimedia drivers.
-
-See the AWS CodeBuild pipeline: RenesasPipeline-EmbeddedLinuxPipeline*
-
-Example stack name: RenesasPipeline
-
-Expected build time: 27min / rebuild (without any change, just use sstate cache): 9min
-
-### A AWS CodeBuild Project
-This will create an Embedded Linux ready AWS CodeBuild project that can be used to connect to a source, e.g. [GitHub Actions](https://docs.aws.amazon.com/codebuild/latest/userguide/action-runner.html). This is not using any CodePipeline.
-
-And use the EFS to share downloads and sstate cache between the runners.
-
-The connection to the CodeBuild source must be performed manually.
-
-Also you can clone the CodeBuild project and share the efs between the CodeBuild projects.
-
-See the AWS CodeBuild pipeline: EmbeddedLinuxCodebuildProje-*
-
-To make a source connection to GitHub you need to:
-- Select a "Source provider"->"GitHub"
-- Select "Primary source webhook events" -> "Webhook - optional" -> "Rebuild every time a code change is pushed to this repository"
-- Add "Filter group 1" -> "WORKFLOW_JOB_QUEUED"
-- Modify the GitHub action `runs-on: ${{ vars.CODEBUILD_RUNNER_NAME }}-${{ github.run_id }}-${{ github.run_attempt }}`
-CODEBUILD_RUNNER_NAME should be `codebuild-EmbeddedLinuxCodebuildProjeNAME` with prefix `codebuild-`. See example [here](https://github.com/aws4embeddedlinux/meta-aws-demos/blob/master/.github/workflows/build-gg.yml).
-
-Example stack name: EmbeddedLinuxCodeBuildProject
-
-## Useful NPM and CDK commands
-
--   `npm run build` compile typescript to js
--   `npm run watch` watch for changes and compile
--   `npm run test` perform the jest unit tests
--   `cdk deploy` deploy this stack to your default AWS account/region
--   `cdk diff` compare deployed stack with current state
--   `cdk synth` emits the synthesized CloudFormation template
-
-Project Specific:
--   `npm run format` runs prettier and eslint on the repository
--   `npm run zip-data` bundles the files for creating build host containers
--   `npm run check` checks for lint and format issues
--   `npm run docs` to generate documentation
 
 ## Security
 
