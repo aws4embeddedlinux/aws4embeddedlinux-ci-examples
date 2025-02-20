@@ -6,8 +6,7 @@ In order to use these examples, you must set up the [CDK](https://docs.aws.amazo
 installing the CDK tool and bootstrapping the account you wish to deploy to. Additionally, you must have [Node](https://nodejs.org/en/) installed.
 
 > [!NOTE]
-> This library is tested against Node Versions 16, 18, and 20. If these versions are not available for your system, we recommend
-> using [NVM](https://github.com/nvm-sh/nvm) to install a compatible version.
+> This library is tested against Node Versions 22. If these version is not available for your system, we recommend using [NVM](https://github.com/nvm-sh/nvm) to install a compatible version.
 
 ---
 
@@ -43,12 +42,27 @@ cdk bootstrap aws://$AWS_DEFAULT_ACCOUNT/$AWS_DEFAULT_REGION
 
 ### Install packages and build the stack
 
+First move to the `cdk` folder:
+ 
 ```bash
 cd cdk
+```
 
+Then you will need to install the CDK library including the `aws4embeddedlinux-ci` library either using `npm`:
+
+```bash
+npm install 
+npm run build
+```
+
+of `yarn':
+
+```bash
 yarn install
 yarn build
 ```
+
+> If you are not familliar with Yarn, please refer to the [documentation](https://yarnpkg.com/getting-started).
 
 > [!NOTE]
 >
@@ -130,7 +144,15 @@ Again, the created pipeline can be found in the AWS console under `Developer Too
 
 > [!**Custom Pipeline**] 
 > 
-> TODO
+> When using the **Custom** pipeline, you will need to provide your own `build.buildspec.yml` file. 
+>
+> To do so, you will provide a path in one of the `EmbeddedLinuxCodePipelineStack` props (`sourceCustomPath` property).
+> This path repsent the folder where the `build.buildspec.yml` file is located.
+> Make sure to use a full path instead of a relative path to avoid any issues.
+>
+> If the `build.buildspec.yml` file is not present in the provided folder path, the stack will fail to deploy.
+>
+> You can also provide any additional files need to execute your build in the same folder.
 >
 
 To deploy _all_ the example pipelines, you can use the CDK deploy command:
