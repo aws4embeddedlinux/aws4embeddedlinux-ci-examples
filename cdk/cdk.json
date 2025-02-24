@@ -1,8 +1,9 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/app.ts",
-  "poky-pipeline": "npx ts-node --prefer-ts-exts bin/app.ts",
   "watch": {
-    "include": ["**"],
+    "include": [
+      "**"
+    ],
     "exclude": [
       "README.md",
       "cdk*.json",
@@ -18,7 +19,10 @@
   "context": {
     "@aws-cdk-lib/aws-lambda:recognizeLayerVersion": true,
     "@aws-cdk-lib/core:checkSecretUsage": true,
-    "@aws-cdk-lib/core:target-partitions": ["aws", "aws-cn"],
+    "@aws-cdk-lib/core:target-partitions": [
+      "aws",
+      "aws-cn"
+    ],
     "@aws-cdk-lib-containers/ecs-service-extensions:enableDefaultLogDriver": true,
     "@aws-cdk-lib/aws-ec2:uniqueImdsv2TemplateName": true,
     "@aws-cdk-lib/aws-ecs:arnFormatIncludesClusterName": true,

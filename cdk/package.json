@@ -1,0 +1,53 @@
+{
+  "name": "aws4embeddedlinux-cdk-examples",
+  "version": "0.2.0",
+  "bin": "bin/app.ts",
+  "license": "MIT",
+  "scripts": {
+    "clean": "tsc --build --clean",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "cdk": "cdk",
+    "doc": "typedoc --sort source-order --readme README.md",
+    "format": "eslint '**/*.{js,ts,json}' --quiet --fix",
+    "check": "eslint '**/*.{js,ts,json}'",
+    "postclean": "rm -rf ./dist"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "2.176.0",
+    "aws4embeddedlinux-cdk-lib": "github:aws4embeddedlinux/aws4embeddedlinux-ci",
+    "constructs": "^10.4.2",
+    "source-map-support": "^0.5.21"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.4",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.16.0",
+    "@types/jest": "^29.5.14",
+    "@types/node": "20.14.8",
+    "@typescript-eslint/eslint-plugin": "^8.18.0",
+    "@typescript-eslint/parser": "^8.18.0",
+    "aws-cdk": "2.176.0",
+    "cdk-nag": "^2.35.0",
+    "eslint": "^9.16.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-tsdoc": "^0.4.0",
+    "globals": "^15.13.0",
+    "jest": "^29.7.0",
+    "prettier": "^3.4.2",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "typedoc": "^0.27.4",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.18.0"
+  },
+  "resolutions": {
+    "glob": "^9.3.5"
+  },
+  "overrides": {
+    "glob": "^9.3.5"
+  },
+  "packageManager": "yarn@4.6.0"
+}
