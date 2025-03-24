@@ -15,7 +15,7 @@
     "postclean": "rm -rf ./dist"
   },
   "dependencies": {
-    "aws-cdk-lib": "2.176.0",
+    "aws-cdk-lib": "2.184.0",
     "aws4embeddedlinux-cdk-lib": "github:aws4embeddedlinux/aws4embeddedlinux-ci",
     "constructs": "^10.4.2",
     "source-map-support": "^0.5.21"
