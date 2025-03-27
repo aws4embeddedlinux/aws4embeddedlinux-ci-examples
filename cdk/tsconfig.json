@@ -18,9 +18,8 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"],
-    "preserveSymlinks": true,
     "outDir": "./dist"
   },
-  "include": ["bin/**/*"],
+  "include": ["./bin/**/*"],
   "exclude": ["node_modules", "cdk.out", "dist", "test"]
 }
