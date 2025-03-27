@@ -21,6 +21,6 @@
     "preserveSymlinks": true,
     "outDir": "./dist"
   },
-  "include": ["bin/**/*"],
+  "include": ["./bin/**/*"],
   "exclude": ["node_modules", "cdk.out", "dist", "test"]
 }

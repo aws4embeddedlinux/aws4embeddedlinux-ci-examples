@@ -1,5 +1,23 @@
-node_modules
+*.js
+!jest.config.js
+!.eslintrc.js
+!.prettierrc.js
+
+!lib/**/*.ts
+!test/**/*.ts
+*.d.ts
+
 dist
+node_modules
+
+# yarn asset
+yarn-install.log
+.yarn
+!.yarn/releases/
+!.yarn/plugins/
+!.yarn/versions/
+!.yarn/sdks/
+.pnp.*
 
 # yarn asset
 yarn-install.log

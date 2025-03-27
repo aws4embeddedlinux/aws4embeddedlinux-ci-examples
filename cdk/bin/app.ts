@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import path = require("path");
+import * as path from "path";
 
 import * as cdk from "aws-cdk-lib";
 import {
@@ -39,7 +39,7 @@ const pipelineResourcesStack = new PipelineResourcesStack(
   {
     ...defaultProps,
     resource_prefix: resource_prefix,
-  }
+  },
 );
 
 const baseImageStack = new EmbeddedLinuxCodePipelineBaseImageStack(
@@ -51,7 +51,7 @@ const baseImageStack = new EmbeddedLinuxCodePipelineBaseImageStack(
     pipelineArtifactBucket: pipelineResourcesStack.pipelineArtifactBucket,
     ecrRepository: pipelineResourcesStack.ecrRepository,
     encryptionKey: pipelineResourcesStack.encryptionKey,
-  }
+  },
 );
 
 /**
@@ -66,7 +66,7 @@ new EmbeddedLinuxCodeBuildProjectStack(
     ecrRepositoryImageTag: baseImageStack.ecrRepositoryImageTag,
     vpc: pipelineResourcesStack.vpc,
     encryptionKey: pipelineResourcesStack.encryptionKey,
-  }
+  },
 );
 
 /**
@@ -97,10 +97,10 @@ for (const projectType of projectTypes) {
       pipelineArtifactPrefix: `pipeline-${projectType}`,
       vpc: pipelineResourcesStack.vpc,
       encryptionKey: pipelineResourcesStack.encryptionKey,
-    }
+    },
   );
   projectPipeline.addDependency(pipelineResourcesStack);
-  pipelines.addDependency(projectPipeline)
+  pipelines.addDependency(projectPipeline);
 }
 
 /**
@@ -108,7 +108,12 @@ for (const projectType of projectTypes) {
  */
 const projectType = ProjectType.Custom;
 
-const sourceCustomPath : string = path.join(__dirname, "..", "source-repo", projectType);
+const sourceCustomPath: string = path.join(
+  __dirname,
+  "..",
+  "source-repo",
+  projectType,
+);
 console.log(`Using custom source path: ${sourceCustomPath}`);
 
 const projectPipeline = new EmbeddedLinuxCodePipelineStack(
@@ -125,11 +130,11 @@ const projectPipeline = new EmbeddedLinuxCodePipelineStack(
     pipelineArtifactPrefix: `pipeline-${projectType}`,
     vpc: pipelineResourcesStack.vpc,
     encryptionKey: pipelineResourcesStack.encryptionKey,
-    sourceCustomPath : sourceCustomPath
-  }
+    sourceCustomPath: sourceCustomPath,
+  },
 );
 projectPipeline.addDependency(pipelineResourcesStack);
-pipelines.addDependency(projectPipeline)
+pipelines.addDependency(projectPipeline);
 
 // Synthetize the app
 app.synth();
