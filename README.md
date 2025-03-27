@@ -117,7 +117,7 @@ where **\<pipeline-id\>** can be one or more of the following:
 
 Again, the created pipeline can be found in the AWS console under `Developer Tools > Pipeline - CodePipeline > Pipelines`. 
 
-> [!**NXP-IMX**] 
+> [!NOTE] **NXP-IMX**
 > 
 > The deployed pipeline for **NXP-IMX** will not complete as you should first accept the EULA and update the `build.buildspec.yml` file accordingly. See the [IMX Yocto Users Guide](https://www.nxp.com/docs/en/user-guide/IMX_YOCTO_PROJECT_USERS_GUIDE.pdf) for more detail.
 >
@@ -130,7 +130,7 @@ Again, the created pipeline can be found in the AWS console under `Developer Too
 > Once you have adjusted the content, you can update and upload the zip back to Amazon S3, and the pipeline will restart.
 >
 
-> [!**Renesas**] 
+> [!NOTE] **Renesas**
 > 
 > The deployed pipeline for **Renesas** will complete. However, it won't include the Multimedia and Graphics library and related Linux drivers. See the [Renesas](https://github.com/adadouche/aws4embeddedlinux-ci/blob/dev-adadouche/README.md#renesas) section for more detail.
 > The source files are available in a S3 bucket that you can get with the following command:
@@ -142,7 +142,7 @@ Again, the created pipeline can be found in the AWS console under `Developer Too
 > Once you have adjusted the content, you can update and upload the zip back to Amazon S3, and the pipeline will restart.
 >
 
-> [!**Custom Pipeline**] 
+> [!NOTE] **Custom Pipeline**
 > 
 > When using the **Custom** pipeline, you will need to provide your own `build.buildspec.yml` file. 
 >
@@ -161,7 +161,7 @@ To deploy _all_ the example pipelines, you can use the CDK deploy command:
 cdk deploy aws4el-ci-pipelines --require-approval never --concurrency 3
 ```
 
-> [!*NOTE*] 
+> [!NOTE] 
 > 
 > `aws4el-ci-pipelines`is an empty stack that depends on the other stacks, so that if you deploy it, it will deploy the others.
 >
