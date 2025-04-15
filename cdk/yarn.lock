@@ -1532,7 +1532,7 @@ __metadata:
     "@typescript-eslint/parser": "npm:^8.30.1"
     aws-cdk: "npm:^2.1007.0"
     aws-cdk-lib: "npm:^2.189.1"
-    aws4embeddedlinux-cdk-lib: "https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11"
+    aws4embeddedlinux-cdk-lib: "github:aws4embeddedlinux/aws4embeddedlinux-ci.git"
     cdk-nag: "npm:^2.35.70"
     constructs: "npm:^10.4.2"
     eslint: "npm:^9.24.0"
@@ -1554,9 +1554,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"aws4embeddedlinux-cdk-lib@https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11":
+"aws4embeddedlinux-cdk-lib@github:aws4embeddedlinux/aws4embeddedlinux-ci.git":
   version: 0.2.0
-  resolution: "aws4embeddedlinux-cdk-lib@https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11"
+  resolution: "aws4embeddedlinux-cdk-lib@git+ssh://git@github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11"
   dependencies:
     aws-cdk-lib: "npm:^2.189.0"
     constructs: "npm:^10.4.2"
@@ -1759,9 +1759,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001688":
-  version: 1.0.30001713
-  resolution: "caniuse-lite@npm:1.0.30001713"
-  checksum: 10c0/f5468abfe73ce30e29cc8bde2ea67df2aab69032bdd93345e0640efefb76b7901c84fe1d28d591a797e65fe52fc24cae97060bb5552f9f9740322aff95ce2f9d
+  version: 1.0.30001714
+  resolution: "caniuse-lite@npm:1.0.30001714"
+  checksum: 10c0/b0e3372f018c5c177912f0282af98049057d83c80846293a4e3df728644a622db42a9e8971d6b7708d76e0fd4e9f6d5ce93802cf4e6818de80fdf371dc0f6a06
   languageName: node
   linkType: hard
 
