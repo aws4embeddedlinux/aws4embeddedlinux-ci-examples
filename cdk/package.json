@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.189.1",
-    "aws4embeddedlinux-cdk-lib": "https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11",
+    "aws4embeddedlinux-cdk-lib": "github:aws4embeddedlinux/aws4embeddedlinux-ci",
     "constructs": "^10.4.2",
     "source-map-support": "^0.5.21"
   },
