@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "es2020",
     "module": "commonjs",
     "lib": ["es2020", "dom"],
     "declaration": true,
@@ -19,6 +19,8 @@
     "strictPropertyInitialization": false,
     "typeRoots": ["./node_modules/@types"],
     "preserveSymlinks": true,
+    "resolveJsonModule": true,
+    "rootDir": "./bin",
     "outDir": "./dist",
     "types": ["jest", "node"]
   },
