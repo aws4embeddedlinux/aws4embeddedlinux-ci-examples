@@ -1556,7 +1556,7 @@ __metadata:
 
 "aws4embeddedlinux-cdk-lib@github:aws4embeddedlinux/aws4embeddedlinux-ci":
   version: 0.2.0
-  resolution: "aws4embeddedlinux-cdk-lib@https://github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11"
+  resolution: "aws4embeddedlinux-cdk-lib@git+ssh://git@github.com/aws4embeddedlinux/aws4embeddedlinux-ci.git#commit=6a4b8f759bcabfebadf4786a915604a3c7024c11"
   dependencies:
     aws-cdk-lib: "npm:^2.189.0"
     constructs: "npm:^10.4.2"
